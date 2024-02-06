@@ -8,10 +8,23 @@ public class Controles : MonoBehaviour
 {
 
     [Header("CLICK IZQUIERDO")]
-    [SerializeField] Levantar levantar_personaje; 
+    [SerializeField] Levantar levantar; 
+    [Header("CLICK DERECHO")]
+    [SerializeField] Golpear golpear;
 
+
+    //IZQUIERDO
+    [HideInInspector] public Transform personaje;
     bool arrastrando = false;
-    Transform personaje;
+    Personaje script = null;
+
+    //DERECHO
+    Vector3 posicion_original;
+
+    private void Awake()
+    {
+        Instanciar<Controles>.Añadir(this);
+    }
 
     void Update()
     {
@@ -23,7 +36,25 @@ public class Controles : MonoBehaviour
             // CLICK DERECHO
             if (Input.GetMouseButtonDown(1))
             {
-                Debug.Log("Coordenadas: " + hit.point);
+                if (hit.collider.CompareTag("Casa").Log()) return;
+
+                Transform puño = golpear.objeto;
+                puño.position = hit.point.Y(golpear.altura);
+                posicion_original = hit.point.Y(golpear.altura);
+
+                puño.gameObject.SetActive(true);
+
+                ControladorBG.Mover(puño,
+                    new Movimiento(golpear.duracion, new Vector3(puño.position.x, (puño.localScale.y / 2), puño.position.z), golpear.animacion_golpe)
+                );
+
+                ControladorBG.Rutina(golpear.duracion + (golpear.duracion / 2), () =>
+                {
+                    ControladorBG.Mover(puño,
+                        new Movimiento(golpear.duracion, posicion_original, golpear.animacion_regreso)
+                    );
+                });
+
             }
 
             // CLICK IZQUIERDO
@@ -36,11 +67,17 @@ public class Controles : MonoBehaviour
                     arrastrando = true;
                     personaje = hit.transform;
                     personaje.GetComponent<Rigidbody>().useGravity = false;
+                    script = hit.transform.GetComponent<Personaje>();
+
+                    if (script != null)
+                    {
+                        script.moviendose = false;
+                    }
 
                     ControladorBG.Mover(personaje, new Movimiento(
-                        levantar_personaje.duracion,
-                        new Vector3(personaje.position.x, personaje.position.y + levantar_personaje.altura, personaje.position.z),
-                        levantar_personaje.animacion
+                        levantar.duracion,
+                        new Vector3(personaje.position.x, personaje.position.y + levantar.altura, personaje.position.z),
+                        levantar.animacion
                         )
                     );
                 }
@@ -58,9 +95,20 @@ public class Controles : MonoBehaviour
         // Detener arrastre
         if (arrastrando && Input.GetMouseButtonUp(0))
         {
-            personaje.GetComponent<Rigidbody>().useGravity = true;
-            arrastrando = false;
-            personaje = null;
+            Detener();
+        }
+
+    }
+
+    public void Detener() {
+        personaje.GetComponent<Rigidbody>().useGravity = true;
+        arrastrando = false;
+        personaje = null;
+
+        if (script != null)
+        {
+            script.moviendose = true;
+            script?.Cambiar();
         }
     }
 
@@ -77,6 +125,26 @@ public class Controles : MonoBehaviour
             this.altura = altura;
             this.duracion = duracion;
             this.animacion = animacion;
+        }
+    }
+
+    [Serializable]
+    class Golpear
+    {
+        public Transform objeto;
+        public float altura;
+        public float duracion;
+        public AnimationCurve animacion_golpe;
+        public AnimationCurve animacion_regreso;
+
+        public Golpear(Transform objeto, float altura, float duracion, AnimationCurve animacion_golpe, AnimationCurve animacion_regreso)
+        {
+            this.objeto = objeto;
+            this.duracion = duracion;
+            this.altura = altura;
+            this.animacion_golpe = animacion_golpe;
+            this.animacion_regreso = animacion_regreso;
+
         }
     }
 }

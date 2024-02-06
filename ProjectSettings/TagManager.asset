@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Personaje
+  - Casa
+  - "Pu\xF1o"
   layers:
   - Default
   - TransparentFX
