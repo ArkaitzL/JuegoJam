@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4082999152781154724}
   - component: {fileID: 8864613593652046734}
   - component: {fileID: 9007294265735615644}
+  - component: {fileID: 7804566840791682208}
   - component: {fileID: 1366523477955124370}
   - component: {fileID: 2418638383552607070}
   m_Layer: 0
@@ -137,6 +138,27 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &7804566840791682208
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069643187459769735}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 1, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1366523477955124370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,5 +183,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f810ba712262164e935c2274fc68d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidad: 0.75
+  velocidad: 0.6
   moviendose: 1

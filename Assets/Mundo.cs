@@ -40,7 +40,7 @@ public class Mundo : MonoBehaviour
             casas[(index == null) ? Random.Range(0, casas.Length) : (int)index],
             Vector3.zero,
             Quaternion.identity
-        ).transform.SetParent(casa.transform);
+        ).transform.SetParent(casa.transform, false);
 
         //Guarda la referencia
         casa_creadas.Add(casa);

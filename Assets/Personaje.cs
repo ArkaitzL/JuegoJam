@@ -18,6 +18,12 @@ public class Personaje : MonoBehaviour
     void Update()
     {
         if(moviendose) transform.Translate(Vector3.forward * Time.deltaTime * velocidad, Space.Self);
+
+        //RaycastHit hit;
+        //if (!Physics.Raycast(transform.position, Vector3.down, out hit, 10)) {
+        //    controles.Detener();
+        //}
+
     }
 
     public void Cambiar() {

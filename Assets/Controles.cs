@@ -36,7 +36,7 @@ public class Controles : MonoBehaviour
             // CLICK DERECHO
             if (Input.GetMouseButtonDown(1))
             {
-                if (hit.collider.CompareTag("Casa").Log()) return;
+                if (hit.collider.CompareTag("Casa")) return;
 
                 Transform puño = golpear.objeto;
                 puño.position = hit.point.Y(golpear.altura);
@@ -48,7 +48,7 @@ public class Controles : MonoBehaviour
                     new Movimiento(golpear.duracion, new Vector3(puño.position.x, (puño.localScale.y / 2), puño.position.z), golpear.animacion_golpe)
                 );
 
-                ControladorBG.Rutina(golpear.duracion + (golpear.duracion / 2), () =>
+                ControladorBG.Rutina(golpear.duracion, () =>
                 {
                     ControladorBG.Mover(puño,
                         new Movimiento(golpear.duracion, posicion_original, golpear.animacion_regreso)
@@ -89,6 +89,10 @@ public class Controles : MonoBehaviour
         // Mantener arrastre
         if (arrastrando && Input.GetMouseButton(0))
         {
+            if (!Physics.Raycast(ray, out hit)) {
+                Detener();
+                return;
+            }
             personaje.position = new Vector3(hit.point.x, personaje.position.y, hit.point.z);
         }
 
@@ -101,7 +105,7 @@ public class Controles : MonoBehaviour
     }
 
     public void Detener() {
-        personaje.GetComponent<Rigidbody>().useGravity = true;
+        if(personaje != null) personaje.GetComponent<Rigidbody>().useGravity = true;
         arrastrando = false;
         personaje = null;
 
