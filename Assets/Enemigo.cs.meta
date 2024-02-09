@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: c48c6d4f9d7fad244940869fc5ddacfd
+guid: 7fe7adcb73d8890448ab39f40a95ac2a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - sangre: {fileID: 3907346811705310669, guid: c4f9b9e9bc1b06341b5745f3cf448507, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

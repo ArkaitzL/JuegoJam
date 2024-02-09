@@ -535,6 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 494aedbb67dcf5144a03ee173f84b17b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sangre: {fileID: 3907346811705310669, guid: c4f9b9e9bc1b06341b5745f3cf448507, type: 3}
   levantar:
     altura: 0.15
     duracion: 0.025
@@ -780,8 +781,10 @@ MonoBehaviour:
   personaje: {fileID: 1069643187459769735, guid: 8d6fee5f0b6ad2949b888589d2423e5c, type: 3}
   isla: {fileID: 212482851}
   casa_base: {fileID: 2081194997739379923, guid: 55ee012dba5764243b7c76569f4aeb61, type: 3}
-  margen: 2
-  max_habitantes: 5
+  enemigo: {fileID: 1182832083082075328, guid: b42d80e797c820845baf956b575e9412, type: 3}
+  margen: 1
+  casa_tiempo: 20
+  enemigo_tiempo: 15
 --- !u!1 &1755546020
 GameObject:
   m_ObjectHideFlags: 0

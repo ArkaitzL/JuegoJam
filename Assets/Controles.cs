@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Controles : MonoBehaviour
 {
+    [SerializeField] public GameObject sangre;
 
     [Header("CLICK IZQUIERDO")]
     [SerializeField] Levantar levantar; 

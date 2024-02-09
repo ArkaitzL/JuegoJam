@@ -7,23 +7,35 @@ public class Mundo : MonoBehaviour
 {
 
     [SerializeField] GameObject[] casas;
-    [SerializeField] GameObject personaje, isla, casa_base;
+    [SerializeField] GameObject personaje, isla, casa_base, enemigo;
     [SerializeField] float margen = 1.0f;
-    [SerializeField] int max_habitantes = 5;
+    [SerializeField] int casa_tiempo = 20, enemigo_tiempo = 20;
 
     List<GameObject> casa_creadas = new();
-
+    Vector2 areaIsla;
 
     void Start()
     {
+        // Obtiene el tamaño de la isla
+        Vector3 tamaño = isla.GetComponent<Renderer>().bounds.size;
+        areaIsla = new Vector2(tamaño.x - margen, tamaño.z - margen);
+
         Casa(Vector3.zero, 0);
 
-        //ControladorBG.Rutina(.5f, () => {
-        //    Casa(Ubicacion());
-        //}, true);
+        ControladorBG.Rutina(casa_tiempo, () =>
+        {
+            Casa(Ubicacion());
+        }, true);
+
+        ControladorBG.Rutina(enemigo_tiempo, () =>
+        {
+            StartCoroutine(
+                Enemigo(Random.Range(3, 10), Ubicacion())
+           );
+        }, true);
     }
 
-    void Casa(Vector3? posicion, int? index = null) 
+    void Casa(Vector3? posicion, int? index = null)
     {
         if (posicion == null) return;
 
@@ -47,33 +59,47 @@ public class Mundo : MonoBehaviour
 
         //Crea a los habitantes
         StartCoroutine(
-            Personaje(Random.Range(2, max_habitantes))
+            Personaje(Random.Range(2, 5), casa.transform)
         );
     }
 
-    IEnumerator Personaje(int cantidad)
+
+    IEnumerator Personaje(int cantidad, Transform casa)
     {
         for (int i = 0; i < cantidad; i++)
         {
             yield return new WaitForSeconds(2.5f);
 
             // Selecciona una casa aleatoria de las construidas
-            Transform spawn = casa_creadas[Random.Range(0, casa_creadas.Count)].transform.GetChilds(0);
+            Transform spawn = casa.transform.GetChilds(0);
             Instantiate(personaje, spawn.position, Quaternion.identity).transform.SetParent(transform);
+        }
+    }
+
+    IEnumerator Enemigo(int cantidad, Vector3? ubicacion)
+    {
+        for (int i = 0; i < cantidad; i++)
+        {
+            yield return new WaitForSeconds(2.5f);
+
+            // Selecciona una casa aleatoria de las construidas
+            Instantiate(enemigo, (Vector3)ubicacion, Quaternion.identity).transform.SetParent(transform);
         }
     }
 
     Vector3? Ubicacion() 
     {
-        // Obtiene el tamaño de la isla
-        Vector3 tamaño = isla.GetComponent<Renderer>().bounds.size;
-        Vector2 areaIsla = new Vector2(tamaño.x - margen, tamaño.z - margen);
-
         // Genera un punto aleatorio dentro del área de la isla
-        Vector2 ubicacion;
+        Vector3? ubicacion = null;
         int contador = 0;
         do
         {
+            if (contador++ == 100)
+            {
+                break;
+            }
+
+            //Crea un punto random
             ubicacion = new Vector3(
                 Random.Range(-areaIsla.x / 2, areaIsla.x / 2),
                 0,
@@ -81,11 +107,13 @@ public class Mundo : MonoBehaviour
             );
 
         } while (
-            contador++ == 100 ||
-            casa_creadas.Every((casa) =>
-                Vector3.Distance(casa.transform.position, ubicacion) < margen
+            //Comprueba que no este bug con una casa
+            casa_creadas.Some((casa) =>
+                Vector3.Distance(casa.transform.position, (Vector3)ubicacion) < margen
             )
         );
+
+        contador.Log("Intentos: ");
 
         return (contador != 100) ? ubicacion : null;
     }
